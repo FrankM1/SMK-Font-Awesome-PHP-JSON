@@ -1,6 +1,13 @@
 SMK Font Awesome PHP, JSON
 ==========================
 
+============
+
+Added quick and dirty mod for that outputs a json that will be used in the Wordpress editor.
+
+
+============
+
 This repository contains the necessary data to work with Font Awesome in PHP or JSON.
 
 **Requirements:**

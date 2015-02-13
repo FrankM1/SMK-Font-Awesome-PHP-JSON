@@ -1,8 +1,8 @@
 <?php
-/* 
+/*
  * SMK Font Awesome
  *
- * Get font awesome class names in an array or json format. 
+ * Get font awesome class names in an array or json format.
  *
  * -------------------------------------------------------------------------------------
  * @Author: Smartik
@@ -16,114 +16,122 @@
  *
  */
 if( ! class_exists('Smk_FontAwesome') ){
-	class Smk_FontAwesome{
+    class Smk_FontAwesome{
 
-		/**
-		 * Font Awesome
-		 *
-		 * @param string $path font awesome css file path
-		 * @param string $class_prefix change this if the class names does not start with `fa-`
-		 * @return array
-		 */
-		public static function getArray($path, $class_prefix = 'fa-'){
+        /**
+         * Font Awesome
+         *
+         * @param string $path font awesome css file path
+         * @param string $class_prefix change this if the class names does not start with `fa-`
+         * @return array
+         */
+        public static function getArray($path, $class_prefix = 'fa-'){
 
-			if( ! file_exists($path) )
-				return false;//if path is incorect or file does not exist, stop.
+            if( ! file_exists($path) )
+                return false;//if path is incorect or file does not exist, stop.
 
-			$css = file_get_contents($path);
-			$pattern = '/\.('. $class_prefix .'(?:\w+(?:-)?)+):before\s+{\s*content:\s*"(.+)";\s+}/';
+            $css = file_get_contents($path);
+            $pattern = '/\.('. $class_prefix .'(?:\w+(?:-)?)+):before\s+{\s*content:\s*"(.+)";\s+}/';
 
-			preg_match_all($pattern, $css, $matches, PREG_SET_ORDER);
-			
-			$icons = array();
-			foreach ($matches as $match) {
-				$icons[$match[1]] = $match[2];
-			}
-			return $icons;
+            preg_match_all($pattern, $css, $matches, PREG_SET_ORDER);
 
-		}
+            $icons = array();
+            foreach ($matches as $match) {
+                $icons[$match[1]] = substr($match[1], 3);
+            }
+            return $icons;
 
-		################################################################################
-		
-		/**
-		 * Sort array by key name
-		 *
-		 * @param array $array font awesome array. Create it using `getArray` method
-		 * @return array
-		 */
-		public function sortByName($array){
-			
-			if( ! is_array($array) )
-				return false;//Do not proceed if is not array
+        }
 
-			ksort( $array );
-			return $array;
+        ################################################################################
 
-		}
+        /**
+         * Sort array by key name
+         *
+         * @param array $array font awesome array. Create it using `getArray` method
+         * @return array
+         */
+        public function sortByName($array){
 
-		################################################################################
-		
-		/**
-		 * Get only HTML class key(class) => value(class)
-		 *
-		 * @param array $array font awesome array. Create it using `getArray` method
-		 * @return array
-		 */
-		public function onlyClass($array){
-			
-			if( ! is_array($array) )
-				return false;//Do not proceed if is not array
+            if( ! is_array($array) )
+                return false;//Do not proceed if is not array
 
-			$temp = array();
-			foreach ($array as $class => $unicode) {
-				$temp[$class] = $class;
-			}
-			return $temp;
+            ksort( $array );
+            return $array;
 
-		}
+        }
 
-		################################################################################
-		
-		/**
-		 * Get only the unicode key
-		 *
-		 * @param array $array font awesome array. Create it using `getArray` method
-		 * @return array
-		 */
-		public function onlyUnicode($array){
-			
-			if( ! is_array($array) )
-				return false;//Do not proceed if is not array
+        ################################################################################
 
-			$temp = array();
-			foreach ($array as $class => $unicode) {
-				$temp[$unicode] = $unicode;
-			}
-			return $temp;
+        /**
+         * Get only HTML class key(class) => value(class)
+         *
+         * @param array $array font awesome array. Create it using `getArray` method
+         * @return array
+         */
+        public function onlyClass($array){
 
-		}
+            if( ! is_array($array) )
+                return false;//Do not proceed if is not array
 
-		################################################################################
-		
-		/**
-		 * Readable class name. Ex: fa-video-camera => Video Camera
-		 *
-		 * @param array $array font awesome array. Create it using `getArray` method
-		 * @param string $class_prefix change this if the class names does not start with `fa-`
-		 * @return array
-		 */
-		public function readableName($array, $class_prefix = 'fa-'){
-			
-			if( ! is_array($array) )
-				return false;//Do not proceed if is not array
+            $temp = array();
+            foreach ($array as $class => $unicode) {
+                $temp[$class] = $class;
+            }
+            return $temp;
 
-			$temp = array();
-			foreach ($array as $class => $unicode) {
-				$temp[$class] = ucfirst( str_ireplace(array($class_prefix, '-'), array('', ' '), $class) );
-			}
-			return $temp;
+        }
 
-		}
+        ################################################################################
 
-	}//class
+        /**
+         * Get only the unicode key
+         *
+         * @param array $array font awesome array. Create it using `getArray` method
+         * @return array
+         */
+        public function onlyUnicode($array){
+
+            if( ! is_array($array) )
+                return false;//Do not proceed if is not array
+
+            $temp = array();
+            foreach ($array as $class => $unicode) {
+                $temp[$unicode] = $unicode;
+            }
+            return $temp;
+
+        }
+
+        ################################################################################
+
+        /**
+         * Readable class name. Ex: fa-video-camera => Video Camera
+         *
+         * @param array $array font awesome array. Create it using `getArray` method
+         * @param string $class_prefix change this if the class names does not start with `fa-`
+         * @return array
+         */
+        public function readableName($array, $class_prefix = 'fa-'){
+
+            if( ! is_array($array) )
+                return false;//Do not proceed if is not array
+
+            $temp = array();
+            foreach ($array as $class => $unicode) {
+                $temp[$class] = ucfirst( str_ireplace(array($class_prefix, '-'), array('', ' '), $class) );
+            }
+            return $temp;
+
+        }
+
+    }//class
 }//class_exists
+
+//Init font awesome class
+$fa = new Smk_FontAwesome;
+
+//Get array
+$icons = $fa->getArray(dirname(__FILE__) . '/font-awesome.css');
+
+var_export( json_encode($icons) );
