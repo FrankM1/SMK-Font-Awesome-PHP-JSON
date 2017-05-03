@@ -125,13 +125,47 @@ if( ! class_exists('Smk_FontAwesome') ){
 
         }
 
+        /**
+         * Font Awesome
+         *
+         * @param string $path font awesome css file path
+         * @param string $class_prefix change this if the class names does not start with `fa-`
+         * @return array
+         */
+        public static function getFullArray($path, $class_prefix = 'fa-'){
+
+            if( ! file_exists($path) )
+                return false;//if path is incorect or file does not exist, stop.
+
+            $css = file_get_contents($path);
+            $pattern = '/\.('. $class_prefix .'(?:\w+(?:-)?)+):before\s+{\s*content:\s*"(.+)";\s+}/';
+
+            preg_match_all($pattern, $css, $matches, PREG_SET_ORDER);
+
+            $icons = array();
+            $count = 0;
+
+            foreach ($matches as $match) {
+                //var_export( $matches );
+
+                $icons[$count]['id'] = substr($match[1], 3);
+                $icons[$count]['name'] = ucfirst( str_ireplace( array($class_prefix, '-'), array('', ' '), substr($match[1], 3) ) );
+                $icons[$count]['unicode'] = $match[2];
+                $icons[$count]['created'] = 1;
+
+                $count++;
+
+            }
+            return array( 'icons' => $icons );
+        }
+
     }//class
 }//class_exists
 
 //Init font awesome class
-$fa = new Smk_FontAwesome;
+//$fa = new Smk_FontAwesome;
 
 //Get array
-$icons = $fa->getArray(dirname(__FILE__) . '/font-awesome.css');
+//$icons = $fa->getArray(dirname(__FILE__) . '/font-awesome.css');
 
-var_export( json_encode($icons) );
+//var_export( json_encode($icons) );
